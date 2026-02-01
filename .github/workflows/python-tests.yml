@@ -84,9 +84,5 @@ jobs:
     - name: Type check with mypy
       run: |
         source .venv/bin/activate
-        # Проверяем установлен ли mypy
-        if python -c "import mypy" &> /dev/null; then
-          mypy src/ --ignore-missing-imports
-        else
-          echo "Mypy not installed, skipping type checking"
-        fi
+        uv pip install mypy types-requests
+        mypy src/ --ignore-missing-imports
