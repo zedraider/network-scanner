@@ -39,7 +39,7 @@ This project was born from a **real-world problem**: A user had a Xiaomi router 
 
 ### Installation with UV (Recommended)
 
-
+```bash
 # Install UV if you don't have it
 curl -LsSf https://astral.sh/uv/install.sh | sh
 # or on Windows:
@@ -52,9 +52,9 @@ uv sync
 
 # Or install globally
 uv pip install git+https://github.com/zedraider/network-scanner.git
-
+```
 Basic Usage
-
+```bash
 # Scan default network (192.168.1.0/24)
 network-scanner
 
@@ -69,20 +69,22 @@ network-scanner --ports 80,443,8080,8443,8888
 
 # Get help
 network-scanner --help
+```
 📋 Examples
 Find All Web Interfaces
-
+```bash
 network-scanner --network 192.168.1.0/24 --save
 Search for Routers with Specific Ports
 
 network-scanner --ports 80,81,82,443,8080,8081,8443,8888 --save
 Quick Windows Launch
 Double-click scripts/start.bat or run:
-
-powershell
+```
+```powershell
 .\scripts\start.bat
+```
 🖥️ Output Example
-text
+```text
 🚀 РОУТЕР! Найден веб-интерфейс:
   IP:        192.168.3.86
   Порт:      80
@@ -92,6 +94,7 @@ text
   Сервер:    nginx
   Размер:    1760 байт
   Тип:       text/html
+```
 🎯 Use Cases
 ✅ Find unknown devices in your network
 
@@ -109,7 +112,7 @@ text
 
 🛠️ Advanced Features
 Python API
-python
+```python
 from network_scanner import NetworkScanner
 
 # Create scanner with custom settings
@@ -127,6 +130,7 @@ results = scanner.scan_network()
 
 # Save results
 scanner.save_results()
+```
 Custom Scripts
 Check out the scripts/ directory:
 
@@ -166,6 +170,7 @@ All tests run automatically on GitHub Actions for every commit and pull request.
 🔧 Development
 
 # Clone the repository
+```bash
 git clone https://github.com/zedraider/network-scanner.git
 cd network-scanner
 
@@ -182,6 +187,7 @@ ruff check src/
 
 # Run type checker
 mypy src/
+```
 🤝 Contributing
 Contributions are welcome! Whether you found a bug, have a feature request, or want to improve documentation:
 
