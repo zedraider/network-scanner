@@ -1,0 +1,18 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%  # Минимальное покрытие
+        threshold: 5%  # Допустимое отклонение
+    patch: off
+
+comment:
+  layout: "reach,diff,flags,tree"
+  behavior: default
+  require_changes: false
+
+ignore:
+  - "tests/"
+  - "**/__pycache__/"
+  - ".venv/"
+  - ".github/"
