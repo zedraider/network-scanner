@@ -156,7 +156,7 @@ network-scanner/
 ├── .github/workflows/       # CI/CD pipelines
 └── results/                 # Scan results (gitignored)
 🧪 Testing
-
+```python
 # Run all tests
 pytest tests/
 
@@ -166,11 +166,11 @@ pytest --cov=src tests/
 # Run specific test file
 pytest tests/test_scanner.py -v
 All tests run automatically on GitHub Actions for every commit and pull request.
-
+```
 🔧 Development
-
-# Clone the repository
 ```bash
+# Clone the repository
+
 git clone https://github.com/zedraider/network-scanner.git
 cd network-scanner
 
