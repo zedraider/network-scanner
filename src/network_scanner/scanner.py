@@ -181,14 +181,17 @@ class NetworkScanner:
             charset_start = content_type.find('charset=') + 8
             charset = content_type[charset_start:].split(';')[0].strip()
             if charset:
+                # Приводим к стандартным названиям
+                charset = charset.lower().replace('utf8', 'utf-8')
                 return charset
         
         # Пробуем определить по содержимому
         content = response.content if hasattr(response, 'content') else response.text
         
-        # Список кодировок для проверки (приоритет: UTF-8, китайские, затем другие)
+        # Список кодировок для проверки (UTF-8 имеет наивысший приоритет)
         encodings_to_try = [
-            'utf-8', 'gbk', 'gb2312', 'gb18030', 'big5',
+            'utf-8',  # Первый приоритет - UTF-8
+            'gbk', 'gb2312', 'gb18030', 'big5',
             'windows-1251', 'iso-8859-1', 'iso-8859-5',
             'shift-jis', 'euc-jp', 'cp866'
         ]
@@ -211,16 +214,8 @@ class NetworkScanner:
             except (UnicodeDecodeError, UnicodeEncodeError):
                 continue
         
-        # Если ничего не подошло, пробуем chardet если установлен
-        try:
-            import chardet
-            result = chardet.detect(content if isinstance(content, bytes) else content.encode())
-            if result['confidence'] > 0.7:
-                return result['encoding']
-        except ImportError:
-            pass
-        
-        return 'utf-8'  # По умолчанию
+        # Если ничего не подошло, возвращаем UTF-8 по умолчанию
+        return 'utf-8'
 
     def has_garbled_text(self, text):
         """Проверяет, содержит ли текст явно испорченные символы"""
@@ -263,19 +258,53 @@ class NetworkScanner:
 
     def fix_common_encoding_issues(self, text):
         """Исправляет распространенные проблемы с кодировкой"""
-        # Словарь замен для распространенных проблем
-        common_fixes = {
-            'å°ç±³è·¯ç±å¨': '小米路由器',  # Наш конкретный случай
+        if not text:
+            return text
+        
+        # Специальный случай: Xiaomi роутер (наша главная задача!)
+        if "å°ç±³è·¯ç±å¨" in text:
+            text = text.replace("å°ç±³è·¯ç±å¨", "小米路由器")
+        
+        # Словарь замен для UTF-8 неправильно декодированного как Latin-1
+        # Это когда UTF-8 байты интерпретируются как Latin-1
+        utf8_latin1_fixes = {
+            # Двухбайтовые UTF-8 символы (C3 xx в UTF-8)
             'Ã¡': 'á', 'Ã©': 'é', 'Ã': 'í', 'Ã³': 'ó', 'Ãº': 'ú',
-            'Ã±': 'ñ', 'Ã¼': 'ü', 'Ã§': 'ç',
+            'Ã±': 'ñ', 'Ã¼': 'ü', 'Ã§': 'ç', 'Ã¤': 'ä', 'Ã¶': 'ö',
+            'Ã¬': 'ì', 'Ãª': 'ê', 'Ã«': 'ë', 'Ã¨': 'è', 'Ã¢': 'â',
+            'Ã£': 'ã', 'Ã¥': 'å', 'Ã¦': 'æ', 'Ã°': 'ð', 'Ã²': 'ò',
+            'Ã´': 'ô', 'Ãµ': 'õ', 'Ã¸': 'ø', 'Ã¹': 'ù', 'Ã»': 'û',
+            'Ã½': 'ý', 'Ã¾': 'þ',
+            
+            # Трехбайтовые UTF-8 символы (E2 82 AC в UTF-8 = €)
             'â‚¬': '€', 'â€š': '‚', 'â€ž': '„', 'â€¦': '…',
             'â€¡': '‡', 'â€°': '‰', 'â€¹': '‹', 'â€˜': '‘',
             'â€™': '’', 'â€œ': '“', 'â€�': '”', 'â€¢': '•',
             'â€“': '–', 'â€”': '—', 'â„¢': '™', 'â€º': '›',
+            'â€¼': '¼', 'â€½': '½', 'â€¾': '¾',
         }
         
-        for wrong, correct in common_fixes.items():
-            text = text.replace(wrong, correct)
+        # Применяем замены
+        for wrong, correct in utf8_latin1_fixes.items():
+            if wrong in text:
+                text = text.replace(wrong, correct)
+        
+        # Специальная обработка: если видим паттерн UTF-8 → Latin-1
+        # Пробуем перекодировать: text -> bytes(latin-1) -> decode(utf-8)
+        try:
+            # Проверяем есть ли признаки неправильной кодировки
+            if any(char in text for char in ['Ã', 'â', '€']):
+                # Пробуем исправить автоматически
+                try:
+                    # Если текст содержит Latin-1 представление UTF-8
+                    fixed = text.encode('latin-1', errors='ignore').decode('utf-8', errors='ignore')
+                    # Проверяем что результат лучше
+                    if fixed and len(fixed) > 0 and not self.has_garbled_text(fixed):
+                        return fixed
+                except (UnicodeEncodeError, UnicodeDecodeError):
+                    pass
+        except Exception:
+            pass
         
         return text
     
