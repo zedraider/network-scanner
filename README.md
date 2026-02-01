@@ -1,148 +1,116 @@
+@"
 # Network Scanner 🔍
+
+[![GitHub release](https://img.shields.io/github/v/release/zedraider/network-scanner)](https://github.com/zedraider/network-scanner/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![Real-World Tested](https://img.shields.io/badge/Real--World-Tested-green)](https://github.com/zedraider/network-scanner#-real-world-success-story)
+[![GitHub stars](https://img.shields.io/github/stars/zedraider/network-scanner?style=social)](https://github.com/zedraider/network-scanner/stargazers)
 
 A fast Python tool for discovering web interfaces in local networks. Perfect for finding routers, repeaters, IoT devices, and other network equipment.
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+> **Real-World Proven**: Successfully found a 'lost' Xiaomi router with forgotten static IP!
 
 ## Features
 
 - 🚀 **Fast multithreaded scanning** - scans entire /24 network in seconds
 - 🔍 **Automatic router detection** - identifies routers and repeaters
 - 🌐 **HTTP/HTTPS support** - works with both protocols
-- 📊 **Smart analysis** - extracts page titles and server info
+- 📊 **Smart encoding detection** - handles UTF-8, GBK, GB2312 (Chinese devices)
 - 💾 **Export results** - saves to JSON and text formats
 - 🎨 **Colored console output** - easy to read results
 - ⚡ **UV integration** - faster than pip
 
-## Installation
+## Quick Start
 
-### Using UV (Recommended)
+\`\`\`bash
+# Install with UV (recommended)
+uv pip install network-scanner
 
-```bash
-# Install uv if you haven't
-curl -LsSf https://astral.sh/uv/install.sh | sh
-# or on Windows:
-# irm https://astral.sh/uv/install.ps1 | iex
-
-# Clone and install
+# Or from source
 git clone https://github.com/zedraider/network-scanner.git
 cd network-scanner
-uv sync
+uv pip install -e .
 
-Using pip
-bash
-pip install network-scanner
-From source
-bash
-git clone https://github.com/zedraider/network-scanner.git
-cd network-scanner
-pip install -e .
-Quick Start
-bash
+# Scan your network
+network-scanner --save
+\`\`\`
+
+## Real-World Success Story
+
+This tool was born from a real need: finding a 'lost' Xiaomi router with a forgotten static IP address. After years of service as a repeater, the router needed configuration updates but its IP was unknown.
+
+**The Discovery:**
+- First scan found pfSense at 192.168.3.1
+- Unknown device at 192.168.3.86 showed garbled text: \`å°ç±³è·¯ç±å¨\`
+- Added automatic encoding detection
+- **Success!** The garbled text decoded to \`小米路由器\` (Xiaomi Router!)
+
+**Result:** Router found, settings updated, problem solved! Read the full story in [PROJECT_STORY.md](PROJECT_STORY.md).
+
+## Usage Examples
+
+\`\`\`bash
 # Basic scan
 network-scanner
 
 # Scan specific network
 network-scanner --network 192.168.0.0/24
 
-# Save results
-network-scanner --save
-
 # Check additional ports
 network-scanner --ports 80,443,8080,8443,8888
 
-# Help
-network-scanner --help
-Examples
-Find all web interfaces:
-bash
-network-scanner --network 192.168.1.0/24 --save
-Scan with custom ports:
-bash
-network-scanner --ports 80,81,82,443,8080,8081,8443,8888
-Windows users can double-click:
-bash
-scripts\start.bat
-Output Example
-text
-🔥 ROUTER! Web interface found:
-  IP:        192.168.1.1
-  Port:      80 (http)
-  URL:       http://192.168.1.1:80
-  Status:    200
-  Title:     pfSense - Login
-  Server:    nginx
-  Size:      9366 bytes
-Use Cases
-✅ Find unknown devices in your network
+# Save results
+network-scanner --save
+\`\`\`
 
-✅ Discover router IP when you forget it
+## Project Structure
 
-✅ Inventory network equipment
-
-✅ Security audits - find exposed web interfaces
-
-✅ Network troubleshooting
-
-Advanced Usage
-Python API
-python
-from network_scanner import NetworkScanner
-
-scanner = NetworkScanner(network="192.168.1.0/24")
-results = scanner.scan_network()
-
-for device in results:
-    print(f"{device['ip']}:{device['port']} - {device['title']}")
-Integration with pfSense
-The tool was originally created to find network devices when working with pfSense firewalls.
-
-Project Structure
-text
+\`\`\`
 network-scanner/
 ├── src/network_scanner/    # Source code
 ├── tests/                  # Unit tests
 ├── examples/               # Usage examples
 ├── scripts/                # Helper scripts
-└── docs/                   # Documentation
-Development
-bash
+├── docs/                   # Documentation
+└── .github/workflows/     # CI/CD pipeline
+\`\`\`
+
+## Development
+
+\`\`\`bash
 # Setup development environment
 git clone https://github.com/zedraider/network-scanner.git
 cd network-scanner
 uv venv
 source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-uv pip install -e ".[dev]"
+uv pip install -e '.[dev]'
 
 # Run tests
 pytest
 
 # Run linter
 ruff check src/
+\`\`\`
 
-# Run type checking
-mypy src/
-Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Contributing
 
-Fork the repository
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-Create your feature branch (git checkout -b feature/amazing-feature)
+## License
 
-Commit your changes (git commit -m 'Add amazing feature')
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Push to the branch (git push origin feature/amazing-feature)
+## Acknowledgments
 
-Open a Pull Request
+- Created to solve a real networking problem
+- Inspired by the need to find 'lost' network devices
+- Built with ❤️ for sysadmins and network enthusiasts
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
+---
 
-Acknowledgments
-Created for practical network administration needs
+⭐ **If you found this tool useful, please consider giving it a star on GitHub!** ⭐
 
-Inspired by real-world pfSense deployment scenarios
-
-Built with ❤️ for sysadmins and network enthusiasts
+---
+*Last updated: $(Get-Date -Format 'yyyy-MM-dd')*
+"@ | Out-File -FilePath README.md -Encoding UTF8
