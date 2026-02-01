@@ -7,14 +7,10 @@ import socket
 import concurrent.futures
 import ipaddress
 import requests
-import ssl
-from urllib.parse import urlparse
 import argparse
 import time
 from datetime import datetime
 import json
-import sys
-import os
 from pathlib import Path
 import urllib3
 
@@ -52,7 +48,7 @@ class NetworkScanner:
             result = sock.connect_ex((str(ip), port))
             sock.close()
             return result == 0
-        except:
+        except Exception:
             return False
     def analyze_device_type(self, title, content, server=""):
         """Анализирует тип устройства по содержимому"""
@@ -166,7 +162,7 @@ class NetworkScanner:
                 continue
             except requests.exceptions.RequestException:
                 continue
-            except Exception as e:
+            except Exception:
                 continue
         
         return None
@@ -203,7 +199,7 @@ class NetworkScanner:
                     decoded = content.decode(encoding, errors='strict')
                 else:
                     # Если уже строка, проверяем можно ли закодировать и декодировать обратно
-                    encoded = content.encode('utf-8').decode(encoding)
+                    content.encode('utf-8').decode(encoding)
                     decoded = content
                 
                 # Проверяем на наличие явно неправильных символов
@@ -252,7 +248,7 @@ class NetworkScanner:
                     title = self.fix_common_encoding_issues(title)
                     
                     return title[:100]  # Ограничиваем длину
-        except:
+        except Exception:
             pass
         return "No title"
 
@@ -404,14 +400,14 @@ class NetworkScanner:
             future_to_ip = {executor.submit(self.scan_ip, ip): ip for ip in ip_list}
             
             for i, future in enumerate(concurrent.futures.as_completed(future_to_ip), 1):
-                ip = future_to_ip[future]
+                future_to_ip[future]
                 try:
                     results = future.result()
                     if results:
                         for result in results:
                             self.results.append(result)
                             self.print_result(result)
-                except Exception as e:
+                except Exception:
                     pass
                 
                 # Прогресс каждые 10%
@@ -526,7 +522,7 @@ class NetworkScanner:
                         f.write(f"Сервер: {result['server']}\n")
                     f.write("-" * 40 + "\n")
         
-        print(f"\nРезультаты сохранены в папке results/:")
+        print("\nРезультаты сохранены в папке results/:")
         print(f"  JSON: {json_path.name}")
         print(f"  TXT:  {txt_path.name}")
 
@@ -566,7 +562,7 @@ def main():
     
     # Выводим итоги
     print("\n" + "=" * 80)
-    print(f"СКАНИРОВАНИЕ ЗАВЕРШЕНО")
+    print("СКАНИРОВАНИЕ ЗАВЕРШЕНО")
     print(f"Время выполнения: {elapsed_time:.2f} секунд")
     print(f"Найдено веб-интерфейсов: {len(results)}")
     

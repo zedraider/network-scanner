@@ -63,7 +63,7 @@ Examples:
     
     # Выводим итоги
     print("\n" + "=" * 80)
-    print(f"SCAN COMPLETED")
+    print("SCAN COMPLETED")
     print(f"Time elapsed: {elapsed_time:.2f} seconds")
     print(f"Web interfaces found: {len(results)}")
     
