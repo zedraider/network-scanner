@@ -39,7 +39,7 @@ This project was born from a **real-world problem**: A user had a Xiaomi router 
 
 ### Installation with UV (Recommended)
 
-```bash
+
 # Install UV if you don't have it
 curl -LsSf https://astral.sh/uv/install.sh | sh
 # or on Windows:
@@ -52,8 +52,9 @@ uv sync
 
 # Or install globally
 uv pip install git+https://github.com/zedraider/network-scanner.git
+
 Basic Usage
-bash
+
 # Scan default network (192.168.1.0/24)
 network-scanner
 
@@ -70,10 +71,10 @@ network-scanner --ports 80,443,8080,8443,8888
 network-scanner --help
 📋 Examples
 Find All Web Interfaces
-bash
+
 network-scanner --network 192.168.1.0/24 --save
 Search for Routers with Specific Ports
-bash
+
 network-scanner --ports 80,81,82,443,8080,8081,8443,8888 --save
 Quick Windows Launch
 Double-click scripts/start.bat or run:
@@ -151,7 +152,7 @@ network-scanner/
 ├── .github/workflows/       # CI/CD pipelines
 └── results/                 # Scan results (gitignored)
 🧪 Testing
-bash
+
 # Run all tests
 pytest tests/
 
@@ -163,7 +164,7 @@ pytest tests/test_scanner.py -v
 All tests run automatically on GitHub Actions for every commit and pull request.
 
 🔧 Development
-bash
+
 # Clone the repository
 git clone https://github.com/zedraider/network-scanner.git
 cd network-scanner
