@@ -1,5 +1,12 @@
 # Network Scanner 🔍
-
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/zedraider/network-scanner?style=social)](https://github.com/zedraider/network-scanner/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/zedraider/network-scanner?style=social)](https://github.com/zedraider/network-scanner/network/members)
+[![GitHub issues](https://img.shields.io/github/issues/zedraider/network-scanner)](https://github.com/zedraider/network-scanner/issues)
+[![UV](https://img.shields.io/badge/uv-package%20manager-blueviolet)](https://github.com/astral-sh/uv)
+[![Tests](https://github.com/zedraider/network-scanner/actions/workflows/python-tests.yml/badge.svg)](https://github.com/zedraider/network-scanner/actions/workflows/python-tests.yml)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [English](#english) | [Русский](#russian)
 
 ---
