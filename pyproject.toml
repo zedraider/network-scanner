@@ -36,7 +36,12 @@ Homepage = "https://github.com/zedraider/network-scanner"
 Repository = "https://github.com/zedraider/network-scanner.git"
 Issues = "https://github.com/zedraider/network-scanner/issues"
 
+# ВАЖНО: используем правильный синтаксис
 [project.optional-dependencies]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
